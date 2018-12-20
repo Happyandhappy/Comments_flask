@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Website Reivew</title>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="static/css/app.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #563d7c;">
+      <div class="container nav-container">
+        <a class="navbar-brand" href="/"><img src="static/images/logo2.png" width="30" height="30" class="d-inline-block align-top" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/reviews">Reviews<span class="sr-only">(current)</span></a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ml-auto">
+            {% if context.user %}
+            <li class="nav-item">
+                <a class="nav-link">Logged in as {{context.user}}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/register">Register</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+
+    <div class="container">
+        <!-- Show messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{category}}">
+              {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <div class="card gedf-card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="ml-2">
+                            <div class="h5 m-0">Customers' Comments</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+              <ul class="replies">
+                  {% if context['reviews']|length > 0 %}
+                    {% for row in context['reviews'] %}
+                        <hr>
+                        <li class="cmmnt">
+                          <div class="avatar">
+                              <img src="static/images/user1.png" width="45" height="45" alt="Sir_Pig photo avatar">
+                              <header><a href="javascript:void(0);">{{row['customer']}}</a>  <span class="pubdate"><i class="fa fa-clock-o"></i> {{row['created_at']}}</span></header>
+                          </div>
+                          <div class="cmmnt-content">
+                          <p>{{row['comment']}}</p>
+                          </div>
+                        </li>
+                    {% endfor %}
+                  {% else %}
+                       <p>There is not any comments.</p>
+                  {% endif %}
+              </ul>
+            </div>
+            <div class="container" id="postform">
+                <h5>add comment</h5>
+                <form method="post" class="post_form">
+                    {% if context.user %}
+                    <input type="hidden" class="form-control" name="customer" value="{{context.user}}">
+                    {% else %}
+                    <input type="text" class="form-control" name="customer" value="" required>
+                    {% endif %}
+                    <textarea name="comment" class="comment_area form-control" required></textarea>
+                    <button class="btn btn-primary post">Post</button>
+                </form>
+            </div>
+        </div>
+        <br>
+    </div>
+</body>
+<script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+</html>

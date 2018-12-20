@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <link href="static/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="static/css/app.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #563d7c;">
+      <div class="container nav-container">
+        <a class="navbar-brand" href=""><img src="static/images/logo2.png" width="30" height="30" class="d-inline-block align-top" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/reviews">Reviews</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ml-auto">
+            {% if context.user %}
+            <li class="nav-item">
+                <a class="nav-link">Logged in as {{context.user[0]}}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/register">Register</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+
+    <!-- Main page -->
+    <div class="container">
+    <br>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{category}}">
+          {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if context.contents %}
+       {% for card in context.contents %}
+            <!--- \\\\\\\Post-->
+            <div class="card gedf-card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="ml-2">
+                                <div class="h5 m-0">{{card['title']}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i> {{card['release_date']}}</div>
+                    <a class="card-link" href="#">
+                        <h5 class="card-title">{{card['title']}}</h5>
+                    </a>
+
+                    <div class="card-text">
+                        <img src="{{card['image']}}" class="card-left">
+                        <p class="card-right">
+                            {{card['description']}}
+                        </p>
+                    </div>
+
+                    <div class="comments">
+                        {% if card['comments']|length > 0 %}
+                        <li class="cmmnt collapse show"  id="collapse{{loop.index}}">
+                          <hr>
+                          <ul class="replies">
+                            {% for comment in card['comments'] %}
+                            <li class="cmmnt">
+                              <div class="avatar">
+                                  <img src="static/images/user.png" width="45" height="45" alt="Sir_Pig photo avatar">
+                                  <header><a href="javascript:void(0);">{{comment['user']}}</a>  <span class="pubdate">on {{comment['created_at']}}</span></header>
+                              </div>
+                              <div class="cmmnt-content">
+                              <p>{{comment['comment']}}</p>
+                              </div>
+                            </li>
+                            <hr>
+                            {% endfor %}
+                          </ul>
+                        </li>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="#collapse{{loop.index}}" class="card-link collapse show" data-toggle="collapse" data-target="#collapse{{loop.index}}" aria-expanded="true" aria-controls="collapse{{loop.index}}"><i class="fa fa-eye-slash"></i> Show/hide comments</a>
+                    <a href="#postform{{ card['id'] }}" class="card-link" data-toggle="collapse" aria-expanded="false" aria-controls="postform{{ card['id'] }}"><i class="fa fa-comment"></i> Add comment</a>
+                </div>
+                <div class="container collapse" id="postform{{ card['id'] }}">
+                    <h5>add comment</h5>
+                    <form method="post" class="post_form">
+                        <input type="hidden" name="content_id" value="{{card['id']}}">
+                        <textarea name="comment" class="comment_area form-control" required></textarea>
+                        <button class="btn btn-primary post">Post</button>
+                    </form>
+                </div>
+            </div>
+            <br>
+       {% endfor %}
+    {% else %}
+    <div class="card gedf-card">
+        <div class="card-body">
+            There is not contents
+        </div>
+    </div>
+    {% endif %}
+    </div>
+</body>
+<script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+</html>

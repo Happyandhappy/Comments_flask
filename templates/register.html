@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gaming Reviews</title>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="static/css/app.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #563d7c;">
+  <div class="container nav-container">
+    <a class="navbar-brand" href="/"><img src="static/images/logo2.png" width="30" height="30" class="d-inline-block align-top" alt=""></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/reviews">Reviews</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/login">Login</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/register">Register<span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+    <div class="top_gap"></div>
+    <div class="col-md-8 offset-md-2">
+        <form style="border:1px solid #ccc" method="post">
+          <div class="container">
+            <h1 class="title">Sign Up</h1>
+            <p>Please fill in this form to create an account.</p>
+            <hr>
+
+            <!-- Show messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{category}}">
+                  {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <label for="name"><b>Name</b></label>
+            <input type="text" placeholder="Enter Your Name" name="username" required autocomplete="off">
+
+            <label for="username"><b>Enter User Email</b></label>
+            <input type="email" placeholder="Enter email" name="email" required autocomplete="off">
+
+            <label for="password"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" required autocomplete="off">
+
+            <label for="cpassword"><b>Confirm Password</b></label>
+            <input type="password" placeholder="Confirm Password" name="cpassword" required autocomplete="off">
+            <!--<label>-->
+              <!--<input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me-->
+            <!--</label>-->
+            <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+
+            <div class="clearfix">
+                <button type="submit" class="btn btn-success" >Sign Up</button><br><br>
+            </div>
+            <div>If you have own account, go to <a href="/login">Login page</a></div>
+          </div>
+        </form>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+</body>
+</html>
